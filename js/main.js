@@ -1,17 +1,28 @@
+
 class Paintbrush {
   constructor() {
     this.$root = document.getElementById('root');
+    this.$input = document.getElementById('input');
+    this.$value = document.getElementById('value');
+    this.$btn = document.getElementById('btn');
+    this.$back = document.getElementById('back');
 
-    this.v = 10;
     this.COLOR_ARRAY = ["#FF0000", "#FF9900", "#FFCC00", "#00FF00", "#0000FF", "#000066", "#663399", "#000000"];
+    this.CANVAS_BACKGROUND_COLOR = '#ffffff';
+
     this.isRender = false;
+    this.flag = false;
+    this.brushSize = 10;
+
     this.init();
   }
 
   init() {
+    this.$value.textContent = this.$input.value;
+    this.brushSize = this.$input.value;
     this.setCanvas();
-    this.eventHandler();
     this.createColorTable();
+    this.eventHandler();
   }
 
   setCanvas() {
@@ -47,41 +58,30 @@ class Paintbrush {
     if (!this.isRender) return;
     const { offsetX, offsetY } = e;
     this.ctx.beginPath();
-    this.ctx.arc(offsetX, offsetY, this.v, 0, Math.PI * 2, true);
+    this.ctx.arc(offsetX, offsetY, this.brushSize, 0, Math.PI * 2, true);
     this.ctx.fill();
   }
 
   eventHandler() {
-    this.canvas.addEventListener('mousemove', this.optimizeAnimation(this.render));
+    this.canvas.addEventListener('mousemove', this.render);
     this.canvas.addEventListener('mouseup', this.canvasMouseupEvent);
     this.canvas.addEventListener('mousedown', this.canvasMouseupEvent);
-    document.getElementById('input').addEventListener('mouseup', (e) => {
-      const { currentTarget } = e;
-      const { value } = currentTarget;
-      this.v = value;
-      document.getElementById('value').textContent = value;
-    });
-    // this.canvas.addEventListener('mousedown', this.canvasMouseupEvent);
+    this.canvas.addEventListener('mousedown', this.canvasMouseupEvent);
+    this.$input.addEventListener('mousedown', this.setFlagReversal);
+    this.$input.addEventListener('mouseup', this.setFlagReversal);
+    this.$input.addEventListener('mousemove', this.movingRangeChange);
+    this.$input.addEventListener('click', this.clickRangeChange);
+    this.$btn.addEventListener('click', this.canvasClear);
+    this.$back.addEventListener('click', this.setBackgroundColorReversal);
+  }
+
+  setFlagReversal = () => {
+    this.flag = !this.flag;
   }
 
   canvasMouseupEvent = (e) => {
     this.isRender = !this.isRender;
     this.render(e);
-  }
-
-  // 1초에 최대 60번 실행
-  // 60 프레임
-  optimizeAnimation = (callback) => {
-    let ticking = false;
-    return (e) => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(() => {
-          callback(e);
-          ticking = false;
-        });
-      }
-    };
   }
 
   createColorTable() {
@@ -129,21 +129,47 @@ class Paintbrush {
     this.setCanvasFillStyle(color);
   }
 
-  clear = () => {
+  canvasClear = () => {
     const { width } = this.ctx.canvas;
     const { height } = this.ctx.canvas;
-    this.ctx.fillStyle = `#fff`;
+    this.ctx.fillStyle = this.CANVAS_BACKGROUND_COLOR;
     this.ctx.fillRect(0, 0, width, height);
-    this.ctx.fillStyle = `#000`;
+    this.setDefaultColor();
   }
-  /*
-   블랙 배경에 흰색 선
-   붓 크기 결정
-   캔버스 크기 결정
-   지우개
 
 
-  */
+  movingRangeChange = (e) => {
+    if (!this.flag) return;
+    const { currentTarget } = e;
+    const { value } = currentTarget;
+    this.$value.textContent = value;
+    this.brushSize = value;
+  }
+  clickRangeChange = (e) => {
+    if (this.flag) return;
+    const { currentTarget } = e;
+    const { value } = currentTarget;
+    this.$value.textContent = value;
+    this.brushSize = value;
+  }
+
+  setDefaultColor() {
+    this.CANVAS_BACKGROUND_COLOR === '#ffffff'
+      ? this.ctx.fillStyle = '#000000'
+      : this.ctx.fillStyle = '#ffffff';
+  }
+  setBackgroundColorReversal = () => {
+    const { width } = this.ctx.canvas;
+    const { height } = this.ctx.canvas;
+
+    this.CANVAS_BACKGROUND_COLOR === '#ffffff'
+      ? this.CANVAS_BACKGROUND_COLOR = '#000000'
+      : this.CANVAS_BACKGROUND_COLOR = '#ffffff'
+
+    this.ctx.fillStyle = this.CANVAS_BACKGROUND_COLOR;
+    this.ctx.fillRect(0, 0, width, height);
+    this.setDefaultColor();
+  }
 
 }
 

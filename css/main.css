@@ -1,17 +1,15 @@
-body {
-  font-family: "Black Han Sans", sans-serif;
-  margin: 0;
-}
+body { font-family: "Black Han Sans", sans-serif; margin: 0; }
 
-#title {
-  font-size: 3rem;
-  margin-bottom: 5px;
-  white-space: nowrap;
-}
+#title { font-size: 3rem; margin-bottom: 5px; white-space: nowrap; }
 
-#root {
-  max-width: 760px;
-  margin: auto;
-  margin-top: 100px;
-  text-align: center;
-}
+#root { max-width: 760px; margin: auto; margin-top: 100px; text-align: center; }
+
+#input { display: inline-block; }
+
+#value { margin: 0 5px; font-size: 1.5rem; width: 50px; }
+
+#size { margin-bottom: 10px; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+
+#btn, #back { border: none; margin: 0 5px; padding: 5px 10px; background-color: #333; color: #fff; cursor: pointer; border-radius: 5px; height: 35px; border: 1px solid transparent; }
+
+#btn:hover, #back:hover { background-color: #fff; color: #333; border: 1px solid #333; }
