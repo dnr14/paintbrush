@@ -1,4 +1,3 @@
-
 class Paintbrush {
   constructor() {
     this.$root = document.getElementById('root');
