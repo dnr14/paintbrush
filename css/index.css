@@ -2,7 +2,7 @@ body { font-family: "Black Han Sans", sans-serif; margin: 0; }
 
 #title { font-size: 3rem; margin-bottom: 5px; white-space: nowrap; }
 
-#root { max-width: 760px; margin: auto; margin-top: 100px; text-align: center; }
+#root { max-width: 760px; margin: auto; margin-top: 50px; margin-bottom: 50px; text-align: center; }
 
 #input { display: inline-block; }
 
